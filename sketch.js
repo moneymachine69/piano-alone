@@ -3,7 +3,7 @@ let skeles = [];
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
-  skeles.push(new Skele(0, 30, false));
+  skeles.push(new Skele(0, 50, false));
 }
 
 function draw() {
@@ -31,6 +31,7 @@ class Skele {
     this.location = createVector(_x, _y);
 
     if (_random) {
+      this.size*=1.5;
       this.head = createVector(random(this.size / 4), random(this.size / 4));
       this.shoulderLeft = createVector(
         random(this.size / 4),
