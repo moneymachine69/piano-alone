@@ -73,15 +73,15 @@ function parseData() {
 }
 
 function mapData(){
-  humidity = map(humidity, 0, 100, 0, 150);
-  clouds = map(clouds, 0, 100, 0, 150);
-  pressure = map(pressure, 990, 1030, 0, 150);
-  windDir = map(windDir, -360, 360, 0, 150);
-  windSpeed = map(windSpeed, 0, 30, 0, 150); //beaufort scale converted to m/s
-  temp = map(temp, 243, 333, 0, 150);
-  tempMax = map(tempMax, 243, 333, 0, 150);
-  tempMin = map(tempMin, 243, 333, 0, 150);
-  feelsLike = map(feelsLike, 243, 333, 0, 150);
+  humidity = map(humidity, 0, 100, 0, 250);
+  clouds = map(clouds, 0, 100, 0, 250);
+  pressure = map(pressure, 990, 1030, 0, 250);
+  windDir = map(windDir, -360, 360, 0, 250);
+  windSpeed = map(windSpeed, 0, 30, 0, 250); //beaufort scale converted to m/s
+  temp = map(temp, 243, 333, 0, 250);
+  tempMax = map(tempMax, 243, 333, 0, 250);
+  tempMin = map(tempMin, 243, 333, 0, 250);
+  feelsLike = map(feelsLike, 243, 333, 0, 250);
   //add to the weather array
   weatherVariables.push(humidity, clouds, pressure, windDir, windSpeed, temp, tempMax, tempMin, feelsLike);
 }
@@ -235,7 +235,7 @@ class Skele {
     // draw keypoints
     this.keyPoints.forEach((p) => {
       strokeWeight(this.size / 50);
-      stroke(hue, 100, 100);
+      stroke(hue, 50, 100);
       point(p.x, p.y);
       hue += 360 / this.keyPoints.length;
     });
