@@ -1,5 +1,7 @@
 let skeles = [];
 
+//MIDI
+let myOutput; //the variable in charge of out MIDI output
 
 //relating to weather
 let weatherVariables= new Array();
@@ -42,6 +44,11 @@ function setup() {
   mapData();
 
   threshold = 3*height/4;
+
+  WebMidi
+  .enable()
+  .then(onEnabled)
+  .catch(err => alert(err));
 }
 
 function draw() {
@@ -50,9 +57,16 @@ function draw() {
   skeles.forEach((skele) => {
       skele.draw();
       skele.update();
-      if(this.location.y > height + 500) {
+      if(skele.location.y > height + 500) {
         skeles.shift();
       }
+      skele.keyPoints.forEach((p) => {
+        if(p.y > threshold){
+         // myOutput.playNote(map(p.x, 0, width, 0, 108), 1, {duration: 1000, rawAttack: 100});
+         console.log(map(p.x, 0, width, 0, 108));
+        }
+      });
+
   });
 
   strokeWeight(2);
@@ -108,7 +122,6 @@ class Skele {
 
     if (_random) {
       this.size*=1.5;
-      console.log(weatherVariables);
       this.head = createVector(weatherVariables[int(random(8))], weatherVariables[int(random(8))]);
       this.shoulderLeft = createVector(
         weatherVariables[int(random(8))],
@@ -259,4 +272,21 @@ class Skele {
     });
     pop();
   }
+}
+
+function onEnabled() {
+  console.log("WebMIDI Enabled");
+  
+  // Inputs
+  WebMidi.inputs.forEach(input => console.log("Input: ",input.manufacturer, input.name));
+  
+  // Outputs
+  WebMidi.outputs.forEach(output => console.log("Output: ",output.manufacturer, output.name));
+  
+  //Looking at the first output available to us
+  console.log(WebMidi.outputs[0]);
+
+  //assign that output as the one we will use later
+  myOutput = WebMidi.outputs[0];
+  
 }
