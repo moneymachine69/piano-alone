@@ -40,7 +40,7 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  background(249, 239, 207); // off white
   
   skeles.forEach((skele) => {
       skele.draw();
@@ -178,14 +178,15 @@ class Skele {
   }
 
   draw() {
-    colorMode(HSB);
+    //colorMode(HSB);
     let hue = 0;
     push();
     translate(this.location.x, this.location.y);
 
     // draw connecting lines
     strokeWeight(1);
-    stroke(255);
+    // stroke(255);
+    stroke(17, 9, 2);
     beginShape(LINES);
 
     // left arm
@@ -235,7 +236,8 @@ class Skele {
     // draw keypoints
     this.keyPoints.forEach((p) => {
       strokeWeight(this.size / 50);
-      stroke(hue, 50, 100);
+      //stroke(hue, 50, 100);
+      stroke(17, 9, 2);
       point(p.x, p.y);
       hue += 360 / this.keyPoints.length;
     });
