@@ -52,7 +52,8 @@ function setup() {
 }
 
 function draw() {
-  background(0);
+  background(249, 239, 207); // off white
+
   
   skeles.forEach((skele) => {
       skele.draw();
@@ -62,25 +63,25 @@ function draw() {
       }
       for(let i = 0; i < skele.keyPoints.length; i++){
 
-      let p = skele.keyPoints[i];
-      
-        if(p.y > threshold && !skele.keyPointsPlayed[i] ){
-          skele.keyPointsPlayed[i] = true;
-         //myOutput.playNote(int(map(p.x, 0, width, 0, 108)), 1, {duration: 1000, rawAttack: 100});
-         console.log(int(map(p.x, 0, width, 0, 108)));
-         // remember to pass ints to midi
-        }
+        let p = skele.keyPoints[i];
+          if(p.y > threshold && !skele.keyPointsPlayed[i] ){
+            skele.keyPointsPlayed[i] = true;
+          //myOutput.playNote(int(map(p.x, 0, width, 0, 108)), 1, {duration: 1000, rawAttack: 100});
+          console.log(int(map(p.x, 0, width, 0, 108)));
+          // remember to pass ints to midi
+          }
       }
 
   });
 
   strokeWeight(2);
-  stroke(255);
+  //stroke(255);
+  stroke(17, 9, 2);
   line(0, threshold, width, threshold)
 
   for(let x = 0; x < width; x+=width/108) {
     strokeWeight(0.5);
-    stroke(255);
+    //stroke(255);
     line(x, 0, x, height);
   }
 }
@@ -91,7 +92,7 @@ function mousePressed() {
 }
 
 function windowResized() {
-  background(0);
+  background(249, 239, 207); // off white
   resizeCanvas(windowWidth, windowHeight);
 }
 
@@ -224,14 +225,15 @@ class Skele {
   }
 
   draw() {
-    colorMode(HSB);
-    let hue = 0;
+    //colorMode(HSB);
+    //let hue = 0;
     push();
    // translate(this.location.x, this.location.y);
 
     // draw connecting lines
     strokeWeight(1);
-    stroke(255);
+    //stroke(255);
+    stroke(17, 9, 2);
     beginShape(LINES);
 
     // left arm
@@ -279,12 +281,14 @@ class Skele {
     endShape();
 
     // draw keypoints
-    this.keyPoints.forEach((p) => {
+    for(let i = 0; i < this.keyPoints.length; i++){
+      let p = this.keyPoints[i];
       strokeWeight(this.size / 50);
-      stroke(hue, 50, 100);
+      //stroke(hue, 50, 100);
+      if (this.keyPointsPlayed[i]){stroke(255, 50, 50);}else{stroke(17, 9, 2);}
       point(p.x, p.y);
-      hue += 360 / this.keyPoints.length;
-    });
+      //hue += 360 / this.keyPoints.length;
+    };
     pop();
   }
 }
