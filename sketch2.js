@@ -60,12 +60,17 @@ function draw() {
       if(skele.location.y > height + 500) {
         skeles.shift();
       }
-      skele.keyPoints.forEach((p) => {
-        if(p.y > threshold){
-         // myOutput.playNote(map(p.x, 0, width, 0, 108), 1, {duration: 1000, rawAttack: 100});
-         console.log(map(p.x, 0, width, 0, 108));
+      for(let i = 0; i < skele.keyPoints.length; i++){
+
+      let p = skele.keyPoints[i];
+      
+        if(p.y > threshold && !skele.keyPointsPlayed[i] ){
+          skele.keyPointsPlayed[i] = true;
+         //myOutput.playNote(int(map(p.x, 0, width, 0, 108)), 1, {duration: 1000, rawAttack: 100});
+         console.log(int(map(p.x, 0, width, 0, 108)));
+         // remember to pass ints to midi
         }
-      });
+      }
 
   });
 
@@ -193,6 +198,8 @@ class Skele {
       this.footRight = createVector((4 * this.size) / 7, (8 * this.size) / 12);
     }
 
+    this.keyPointsPlayed = [false,false,false,false,false,false,false,false,false,false,false,false,false]
+
     this.keyPoints = [
       this.head,
       this.shoulderLeft,
@@ -211,14 +218,16 @@ class Skele {
   }
 
   update() {
-    this.location.add(this.vel);
+    this.keyPoints.forEach(p => {
+      p.y+=this.vel.y;
+    })
   }
 
   draw() {
     colorMode(HSB);
     let hue = 0;
     push();
-    translate(this.location.x, this.location.y);
+   // translate(this.location.x, this.location.y);
 
     // draw connecting lines
     strokeWeight(1);
