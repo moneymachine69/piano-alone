@@ -72,6 +72,12 @@ function draw() {
   strokeWeight(2);
   stroke(255);
   line(0, threshold, width, threshold)
+
+  for(let x = 0; x < width; x+=width/108) {
+    strokeWeight(0.5);
+    stroke(255);
+    line(x, 0, x, height);
+  }
 }
 
 function mousePressed() {
