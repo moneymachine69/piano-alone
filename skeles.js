@@ -139,7 +139,7 @@ class Skele {
     this.location = createVector(_x, _y);
     this.vel = createVector(0, 3);
     this.accel = createVector(0, 0.001);
-    this.crumpleFactor = random(.15, 3);
+    this.crumpleFactor = random(.175, 3);
 
     if (_random) {
       this.size*=1.5;
