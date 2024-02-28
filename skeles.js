@@ -67,7 +67,8 @@ function draw() {
           if(p.y > threshold && !skele.keyPointsPlayed[i] ){
             skele.keyPointsPlayed[i] = true;
           //myOutput.playNote(int(map(p.x, 0, width, 0, 108)), 1, {duration: 1000, rawAttack: 100});
-          console.log(int(map(p.x, 0, width, 0, 108)));
+          const NOTE_TO_PLAY = int(map(p.x, 0, width, 0, 108, true))
+          console.log(NOTE_TO_PLAY);
           // remember to pass ints to midi
           }
       }
