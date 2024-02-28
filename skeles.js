@@ -35,7 +35,7 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(1080, 1920);
   background(0);
   skeles.push(new Skele(0, 50, false));
 
@@ -96,10 +96,10 @@ setInterval(function(){
   skeles.push(new Skele(random(width/6, 9*width/10), -500, true));
 }, 2200)
 
-function windowResized() {
-  background(249, 239, 207); // off white
-  resizeCanvas(windowWidth, windowHeight);
-}
+// function windowResized() {
+//   background(249, 239, 207); // off white
+//   resizeCanvas(windowWidth, windowHeight);
+// }
 
 function parseData() {
   pressure = weatherData.main.pressure; 
@@ -139,7 +139,7 @@ class Skele {
     this.location = createVector(_x, _y);
     this.vel = createVector(0, 3);
     this.accel = createVector(0, 0.001);
-    this.crumpleFactor = random(.8, 6);
+    this.crumpleFactor = random(.15, 3);
 
     if (_random) {
       this.size*=1.5;
