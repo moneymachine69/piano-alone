@@ -100,6 +100,7 @@ setInterval(function(){
 //   background(249, 239, 207); // off white
 //   resizeCanvas(windowWidth, windowHeight);
 // }
+//
 
 function parseData() {
   pressure = weatherData.main.pressure; 
