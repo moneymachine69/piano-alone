@@ -35,7 +35,7 @@ function preload(){
 }
 
 function setup() {
-  createCanvas(900, 1600);
+  createCanvas(windowWidth, windowHeight);
   background(0);
   skeles.push(new Skele(0, 50, false));
 
@@ -93,13 +93,13 @@ function mousePressed() {
 }
 
 setInterval(function(){
-  skeles.push(new Skele(random(width/6, 8*width/10), -500, true));
-}, 2000)
+  skeles.push(new Skele(random(width/6, 9*width/10), -500, true));
+}, 2200)
 
-// function windowResized() {
-//   background(249, 239, 207); // off white
-//   resizeCanvas(windowWidth, windowHeight);
-// }
+function windowResized() {
+  background(249, 239, 207); // off white
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 function parseData() {
   pressure = weatherData.main.pressure; 
