@@ -93,7 +93,7 @@ function mousePressed() {
 }
 
 setInterval(function(){
-  skeles.push(new Skele(random(width/6, 9*width/10), -500, true));
+  skeles.push(new Skele(random(width/6, 8*width/10), -500, true));
 }, 2200)
 
 // function windowResized() {
