@@ -68,7 +68,7 @@ function draw() {
             skele.keyPointsPlayed[i] = true;          
           
             const NOTE_TO_PLAY = int(map(p.x, 0, width, 0, 108, true))
-            myOutput.playNote(NOTE_TO_PLAY, 1, {duration: 1000, rawAttack: 100});
+            myOutput.playNote(NOTE_TO_PLAY, 1, {duration: 500, rawAttack: 80});
             console.log(NOTE_TO_PLAY);
           }
       }
@@ -92,9 +92,9 @@ function mousePressed() {
   skeles.push(new Skele(mouseX, mouseY, true));
 }
 
-setInterval(function(){
-  skeles.push(new Skele(random(width/6, 8*width/10), -500, true));
-}, 2200)
+// setInterval(function(){
+//   skeles.push(new Skele(random(width/6, 8*width/10), -500, true));
+// }, 2200)
 
 // function windowResized() {
 //   background(249, 239, 207); // off white
@@ -319,5 +319,5 @@ function onEnabled() {
   console.log(WebMidi.outputs);
 
   //assign that output as the one we will use later//
-  myOutput = WebMidi.outputs[2].channels[1];
+  myOutput = WebMidi.outputs[0];
 }
