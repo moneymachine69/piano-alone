@@ -316,9 +316,8 @@ function onEnabled() {
   WebMidi.outputs.forEach(output => console.log("Output: ",output.manufacturer, output.name));
   
   //Looking at the first output available to us
-  console.log(WebMidi.outputs[0]);
+  console.log(WebMidi.outputs);
 
-  //assign that output as the one we will use later
-  myOutput = WebMidi.outputs[0];
-  
+  //assign that output as the one we will use later//
+  myOutput = WebMidi.outputs[2].channels[1];
 }
