@@ -4,24 +4,18 @@ let skeles = [];
 let myOutput; //the variable in charge of out MIDI output
 
 //relating to weather
-let weatherVariables= new Array();
 let weatherData;
 let lat;
 let lon;
-let pressure; //hPa (around 1k usually)
-let humidity; //%
-let windSpeed; //meter/sec
-let windDir; //degrees 360
-let clouds; //%
-//UTC
-let unixDT;
-let unixSunrise;
-let unixSunset;
-//kelvin
-let temp;
-let feelsLike;
-let tempMin;
-let tempMax;
+// let co;
+// let no;
+// let no2;
+// let o3;
+// let so2;
+// let pm2_5;
+// let pm10;
+// let nh3;
+let aqi;
 
 let threshold;
 
@@ -29,7 +23,7 @@ function preload(){
   lat = 41.878113;
   lon = -87.629799;
   let url =
-    "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&appid=87fb783a54817f1793f0556477730e7c";
+    "http://api.openweathermap.org/data/2.5/air_pollution/forecast?lat=" + lat + "&lon=" + lon + "&appid=87fb783a54817f1793f0556477730e7c";
   weatherData = loadJSON(url);
 
 }
@@ -41,7 +35,6 @@ function setup() {
 
   console.log(weatherData);
   parseData();
-  mapData();
 
   threshold = 3*height/4;
 
@@ -97,32 +90,7 @@ function windowResized() {
 }
 
 function parseData() {
-  pressure = weatherData.main.pressure; 
-  humidity = weatherData.main.humidity; 
-  windSpeed = weatherData.wind.speed; 
-  windDir = weatherData.wind.deg; 
-  clouds = weatherData.clouds.all;
-  unixDT = weatherData.dt;
-  unixSunrise = weatherData.sunrise;
-  unixSunset = weatherData.sunset;
-  temp = weatherData.main.temp;
-  feelsLike = weatherData.main.feels_like;
-  tempMin = weatherData.main.temp_min;
-  tempMax = weatherData.main.temp_max;
-}
-
-function mapData(){
-  humidity = map(humidity, 0, 100, 0, 250);
-  clouds = map(clouds, 0, 100, 0, 250);
-  pressure = map(pressure, 990, 1030, 0, 250);
-  windDir = map(windDir, -360, 360, 0, 250);
-  windSpeed = map(windSpeed, 0, 30, 0, 250); //beaufort scale converted to m/s
-  temp = map(temp, 243, 333, 0, 250);
-  tempMax = map(tempMax, 243, 333, 0, 250);
-  tempMin = map(tempMin, 243, 333, 0, 250);
-  feelsLike = map(feelsLike, 243, 333, 0, 250);
-  //add to the weather array
-  weatherVariables.push(humidity, clouds, pressure, windDir, windSpeed, temp, tempMax, tempMin, feelsLike);
+    aqi = weatherData.list[0].main.aqi;
 }
 
 class Skele {
@@ -134,54 +102,54 @@ class Skele {
 
     if (_random) {
       this.size*=1.5;
-      this.head = createVector(weatherVariables[int(random(8))], weatherVariables[int(random(8))]);
+      this.head = createVector(random(this.size / 4), random(this.size / 4));
       this.shoulderLeft = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.elbowLeft = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.handLeft = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.shoulderRight = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.elbowRight = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.handRight = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.waistLeft = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.waistRight = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.kneeLeft = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.footLeft = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.kneeRight = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
       this.footRight = createVector(
-        weatherVariables[int(random(8))],
-        weatherVariables[int(random(8))]
+        random(this.size / 4),
+        random(this.size / 4)
       );
     } else {
       this.head = createVector(this.size / 2, 0);
