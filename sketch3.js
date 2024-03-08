@@ -35,7 +35,7 @@ function preload(){
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
-  skeles.push(new Skele(0, 50, false));
+  skeles.push(new Skele(0, 50, false, 3));
 
   console.log(weatherData);
   parseData();
@@ -87,7 +87,7 @@ function draw() {
 function mousePressed() {
   for (let i = 0; i < overTime.length; i++){
     skeles.push(new Skele(
-      i*10, 0, false));
+      i*10, 0, false, overTime[i].main.aqi));
       // console.log((windowWidth/overTime.length)*(i));
       console.log(i);
   }
@@ -105,13 +105,13 @@ function parseData() {
 }
 
 class Skele {
-  constructor(_x, _y, _random) {
+  constructor(_x, _y, _random, _crumple) {
     // base size of skeleton on smaller screen dimension
     this.size = 400;
     this.location = createVector(_x, _y);
     this.vel = createVector(0, 3);
     this.accel = createVector(0, 0.001);
-    this.crumpleFactor = random(.175, 3);
+    this.crumpleFactor = map(_crumple, 1, 4, .175, 3);
 
     if (_random) {
       this.size*=1.5;
