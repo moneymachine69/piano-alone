@@ -20,6 +20,8 @@ let overTime;
 
 let threshold;
 
+let i;
+
 function preload(){
   lat = 41.878113;
   lon = -87.629799;
@@ -47,6 +49,7 @@ function setup() {
   .then(onEnabled)
   .catch(err => alert(err));
 
+  i= 0;
 }
 
 function draw() {
@@ -85,12 +88,26 @@ function draw() {
 }
 
 function mousePressed() {
-  for (let i = 0; i < overTime.length; i++){
-    skeles.push(new Skele(
-      i*10, 0, false, overTime[i].main.aqi));
-      // console.log((windowWidth/overTime.length)*(i));
-      console.log(i);
+  if (i < (overTime.length - 1)){
+    skeles.push(
+      new Skele((windowWidth/overTime.length)*(i), 0, true, overTime[i].main.aqi)
+      );
+    console.log(i);
+    i++;
+    }
+  else{
+    skeles.push(
+      new Skele((windowWidth/overTime.length)*(i), 0, true, overTime[i].main.aqi)
+      );
+    console.log(i);
+    i=0;
   }
+  // for (let i = 0; i < overTime.length; i++){
+  //   skeles.push(new Skele(
+  //     (windowWidth/overTime.length)*(i), 0, true, overTime[i].main.aqi));
+  //     // console.log((windowWidth/overTime.length)*(i));
+  //     console.log(i);
+  // }
 }
 
 function windowResized() {
@@ -116,55 +133,55 @@ class Skele {
     if (_random) {
       this.size*=1.5;
       this.head = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4));
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4));
       this.shoulderLeft = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.elbowLeft = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.handLeft = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.shoulderRight = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.elbowRight = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.handRight = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.waistLeft = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.waistRight = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.kneeLeft = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.footLeft = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.kneeRight = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
       this.footRight = createVector(
-        max((weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (weatherVariables[int(random(8))]/this.crumpleFactor) + (this.location.y - this.size/4)
+        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
+        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
       );
     } else {
       this.head = createVector(this.size / 2, 0);
