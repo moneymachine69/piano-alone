@@ -68,7 +68,7 @@ function draw() {
             skele.keyPointsPlayed[i] = true;          
           
             const NOTE_TO_PLAY = int(map(p.x, 0, width, 0, 108, true))
-            myOutput.playNote(NOTE_TO_PLAY, 1, {duration: 500, rawAttack: 80});
+            // myOutput.playNote(NOTE_TO_PLAY, 1, {duration: 500, rawAttack: 80});
             console.log(NOTE_TO_PLAY);
           }
       }
