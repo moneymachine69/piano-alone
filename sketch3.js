@@ -90,8 +90,10 @@ function draw() {
 function mousePressed() {
   if (i < (overTime.length - 1)){
     skeles.push(
-      new Skele((windowWidth/overTime.length)*(i), 0, true, overTime[i].main.aqi)
-      );
+      // new Skele((windowWidth/overTime.length)*(i), 0, true, overTime[i].main.aqi)
+      // );
+      new Skele(windowWidth/2, 0, true, overTime[i].main.aqi)
+     );
     console.log(i);
     i++;
     }
