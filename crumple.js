@@ -36,18 +36,25 @@ class Skele {
     // this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
 
     this.head = createVector(x, y - 0.25 * size);
-    this.shoulderLeft = createVector(x - 0.25 * size, y - 0.125 * size);
-    this.elbowLeft = createVector(x - 0.5 * size, y - 0.35 * size);
-    this.handLeft = createVector(x - 0.6 * size, y + 0.6 * size);
-    this.shoulderRight = createVector(x + 0.25 * size, y - 0.125 * size);
-    this.elbowRight = createVector(x + 0.5 * size, y - 0.35 * size);
-    this.handRight = createVector(x + 0.6 * size, y + 0.6 * size);
-    this.waistLeft = createVector(x + 0.6 * size, y + 0.6 * size);
-    this.waistRight = createVector(x + 0.6 * size, y + 0.6 * size);
+    this.shoulderLeft = createVector(x - 0.2 * size, y - 0.125 * size);
+    this.shoulderRight = createVector(x + 0.2 * size, y - 0.125 * size);
+
+    this.elbowLeft = createVector(x - 0.325 * size, y + 0.125 * size);
+    this.elbowRight = createVector(x + 0.325 * size, y + 0.125 * size);
+
+    this.handLeft = createVector(x - 0.25 * size, y + 0.45 * size);
+    this.handRight = createVector(x + 0.25 * size, y + 0.45 * size);
+
+    this.waistLeft = createVector(x - 0.125 * size, y + 0.4 * size);
+    this.waistRight = createVector(x + 0.125 * size, y + 0.4 * size);
+    
     this.kneeLeft = createVector(x + 0.6 * size, y + 0.6 * size);
-    this.footLeft = createVector(x + 0.6 * size, y + 0.6 * size);
     this.kneeRight = createVector(x + 0.6 * size, y + 0.6 * size);
+
+    this.footLeft = createVector(x + 0.6 * size, y + 0.6 * size);
     this.footRight = createVector(x + 0.6 * size, y + 0.6 * size);
+
+
     this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
 
     this.keyPoints = [
@@ -71,7 +78,7 @@ class Skele {
     //colorMode(HSB);
     //let hue = 0;
     // draw connecting lines
-    strokeWeight(1);
+    strokeWeight(2);
     stroke(17, 9, 2);
     beginShape(LINES);
 
@@ -126,11 +133,11 @@ class Skele {
     // draw keypoints
     for (let i = 0; i < this.keyPoints.length; i++) {
       let p = this.keyPoints[i];
-      strokeWeight(this.size / 50);
+      strokeWeight(this.size / 25);
       point(p.x, p.y);
     }
     
-    strokeWeight(this.size/25)
+    strokeWeight(this.size/10)
     point(this.location.x, this.location.y);
   }
 
