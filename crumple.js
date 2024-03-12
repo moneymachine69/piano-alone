@@ -1,5 +1,5 @@
 let skele;
-let distortion = 1;
+let distortion = 0;
 let increaseButton, decreaseButton;
 
 function setup() {
