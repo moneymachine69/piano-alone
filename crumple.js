@@ -1,7 +1,17 @@
 let skele;
 let distortion = 1;
+let increaseButton, decreaseButton;
 
 function setup() {
+
+  increaseButton = createButton('Increase');
+  increaseButton.position(20, 20);
+  increaseButton.mousePressed(increaseDistortion);
+  
+  // Create the decrease button
+  decreaseButton = createButton('Decrease');
+  decreaseButton.position(100, 20);
+  decreaseButton.mousePressed(decreaseDistortion);
   createCanvas(windowWidth, windowHeight);
 
   skele = new Skele(width / 2, height / 2, 600, 1);
@@ -203,5 +213,17 @@ function keyPressed() {
     default:
       // Do nothing for other keys
       break;
+  }
+}
+
+function increaseDistortion() {
+  if (distortion < 5) {
+    distortion++;
+  }
+}
+
+function decreaseDistortion() {
+  if (distortion > 0) {
+    distortion--;
   }
 }
