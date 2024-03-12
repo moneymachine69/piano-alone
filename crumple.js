@@ -3,11 +3,14 @@ let skele;
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  skele = new Skele(width / 2, height / 2, 600);
+  skele = new Skele(width / 2, height / 2, 600, 1);
+  frameRate(10)
 }
 
 function draw() {
   background(255)
+  skele = new Skele(width / 2, height / 2, 600, 1);
+  //console.log(skele.shoulderLeft.x)
   skele.draw();
   // skele.updateSize(map(mouseX, 0, width, 5, 800))
 }
@@ -16,11 +19,22 @@ function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
 }
 
+function randomDistortion(scale) {
+  let randomDistortion = map(random(-scale, scale), -5, 5, -20, 20)
+
+  if(randomDistortion < 0) {
+    return (randomDistortion * randomDistortion) * -1;
+  }
+  return randomDistortion * randomDistortion
+  
+}
+
 class Skele {
   // x, y represents a center point
-  constructor(x, y, size) {
+  constructor(x, y, size, distortScale) {
     this.size = size;
     this.location = createVector(x, y);
+    this.distortScale = distortScale;
 
     // hands up, max vertical dimension
     // this.head = createVector(x, y - 0.29 * size);
@@ -48,7 +62,9 @@ class Skele {
     // hands down
     this.head = createVector(x, y - 0.29 * size);
 
-    this.shoulderLeft = createVector(x - 0.1 * size, y - 0.2 * size);
+    console.log(randomDistortion(distortScale))
+
+    this.shoulderLeft = createVector(x - 0.1 * size + randomDistortion(distortScale), y - 0.2 * size + randomDistortion(distortScale));
     this.shoulderRight = createVector(x + 0.1 * size, y - 0.2 * size);
 
     this.elbowLeft = createVector(x - 0.15 * size, y - 0.06 * size);
