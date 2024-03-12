@@ -3,11 +3,13 @@ let skele;
 function setup() {
   createCanvas(windowWidth, windowHeight);
 
-  skele = new Skele(width / 2, height / 2, 400);
+  skele = new Skele(width / 2, height / 2, 100);
 }
 
 function draw() {
+  background(255)
   skele.draw();
+  skele.updateSize(map(mouseX, 0, width, 5, 800))
 }
 
 function windowResized() {
@@ -35,43 +37,29 @@ class Skele {
     // this.footRight = createVector(this.location.x + (4 * this.size) / 7, this.location.y + (8 * this.size) / 12);
     // this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
 
-    this.head = createVector(x, y - 0.25 * size);
-    this.shoulderLeft = createVector(x - 0.2 * size, y - 0.125 * size);
-    this.shoulderRight = createVector(x + 0.2 * size, y - 0.125 * size);
+    this.head = createVector(x, y - 0.27 * size);
 
-    this.elbowLeft = createVector(x - 0.325 * size, y + 0.125 * size);
-    this.elbowRight = createVector(x + 0.325 * size, y + 0.125 * size);
+    this.shoulderLeft = createVector(x - 0.1 * size, y - 0.2 * size);
+    this.shoulderRight = createVector(x + 0.1 * size, y - 0.2 * size);
 
-    this.handLeft = createVector(x - 0.25 * size, y + 0.45 * size);
-    this.handRight = createVector(x + 0.25 * size, y + 0.45 * size);
+    this.elbowLeft = createVector(x - 0.15 * size, y - 0.335 * size);
+    this.elbowRight = createVector(x + 0.15 * size, y - 0.335 * size);
 
-    this.waistLeft = createVector(x - 0.125 * size, y + 0.4 * size);
-    this.waistRight = createVector(x + 0.125 * size, y + 0.4 * size);
-    
-    this.kneeLeft = createVector(x + 0.6 * size, y + 0.6 * size);
-    this.kneeRight = createVector(x + 0.6 * size, y + 0.6 * size);
+    this.handLeft = createVector(x - 0.15 * size, y - 0.5 * size);
+    this.handRight = createVector(x + 0.15 * size, y - 0.5 * size);
 
-    this.footLeft = createVector(x + 0.6 * size, y + 0.6 * size);
-    this.footRight = createVector(x + 0.6 * size, y + 0.6 * size);
+    this.waistLeft = createVector(x - 0.075 * size, y + 0.07 * size);
+    this.waistRight = createVector(x + 0.075 * size, y + 0.07 * size);
 
+    this.kneeLeft = createVector(x + -0.09 * size, y + 0.265 * size);
+    this.kneeRight = createVector(x + 0.09 * size, y + 0.265 * size);
+
+    this.footLeft = createVector(x - 0.09 * size, y + 0.5 * size);
+    this.footRight = createVector(x + 0.09 * size, y + 0.5 * size);
 
     this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
 
-    this.keyPoints = [
-      this.head,
-      this.shoulderLeft,
-      this.elbowLeft,
-      this.handLeft,
-      this.shoulderRight,
-      this.elbowRight,
-      this.handRight,
-      this.waistLeft,
-      this.waistRight,
-      this.kneeLeft,
-      this.footLeft,
-      this.kneeRight,
-      this.footRight,
-    ];
+    this.keyPoints = [this.head, this.shoulderLeft, this.elbowLeft, this.handLeft, this.shoulderRight, this.elbowRight, this.handRight, this.waistLeft, this.waistRight, this.kneeLeft, this.footLeft, this.kneeRight, this.footRight];
   }
 
   draw() {
@@ -133,13 +121,40 @@ class Skele {
     // draw keypoints
     for (let i = 0; i < this.keyPoints.length; i++) {
       let p = this.keyPoints[i];
-      strokeWeight(this.size / 25);
+      strokeWeight(this.size / 30);
       point(p.x, p.y);
     }
-    
-    strokeWeight(this.size/10)
+
+    stroke(255, 0, 0);
+    strokeWeight(this.size / 15);
     point(this.location.x, this.location.y);
   }
 
-  update() {}
+  updateSize(newSize) {
+
+    this.size = newSize;
+    this.head = createVector(this.location.x, this.location.y - 0.27 * newSize);
+
+    this.shoulderLeft = createVector(this.location.x - 0.1 * newSize, this.location.y - 0.2 * newSize);
+    this.shoulderRight = createVector(this.location.x + 0.1 * newSize, this.location.y - 0.2 * newSize);
+
+    this.elbowLeft = createVector(this.location.x - 0.15 * newSize, this.location.y - 0.335 * newSize);
+    this.elbowRight = createVector(this.location.x + 0.15 * newSize, this.location.y - 0.335 * newSize);
+
+    this.handLeft = createVector(this.location.x - 0.15 * newSize, this.location.y - 0.5 * newSize);
+    this.handRight = createVector(this.location.x + 0.15 * newSize, this.location.y - 0.5 * newSize);
+
+    this.waistLeft = createVector(this.location.x - 0.075 * newSize, this.location.y + 0.07 * newSize);
+    this.waistRight = createVector(this.location.x + 0.075 * newSize, this.location.y + 0.07 * newSize);
+
+    this.kneeLeft = createVector(this.location.x + -0.09 * newSize, this.location.y + 0.265 * newSize);
+    this.kneeRight = createVector(this.location.x + 0.09 * newSize, this.location.y + 0.265 * newSize);
+
+    this.footLeft = createVector(this.location.x - 0.09 * newSize, this.location.y + 0.5 * newSize);
+    this.footRight = createVector(this.location.x + 0.09 * newSize, this.location.y + 0.5 * newSize);
+
+    this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
+
+    this.keyPoints = [this.head, this.shoulderLeft, this.elbowLeft, this.handLeft, this.shoulderRight, this.elbowRight, this.handRight, this.waistLeft, this.waistRight, this.kneeLeft, this.footLeft, this.kneeRight, this.footRight];
+  }
 }
