@@ -7,14 +7,6 @@ let myOutput; //the variable in charge of out MIDI output
 let weatherData;
 let lat;
 let lon;
-// let co;
-// let no;
-// let no2;
-// let o3;
-// let so2;
-// let pm2_5;
-// let pm10;
-// let nh3;
 let aqi;
 let overTime;
 
@@ -37,7 +29,8 @@ function preload(){
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background(0);
-  skeles.push(new Skele(0, 50, false, 3));
+  
+  skeles.push(new Skele(0, 50, 300, 1));
 
   console.log(weatherData);
   parseData();
@@ -92,24 +85,28 @@ function mousePressed() {
     skeles.push(
       // new Skele((windowWidth/overTime.length)*(i), 0, true, overTime[i].main.aqi)
       // );
-      new Skele(windowWidth/2, 0, true, overTime[i].main.aqi)
+      new Skele(windowWidth/2, 0, 300, overTime[i].main.aqi)
      );
     console.log(i);
     i++;
     }
   else{
     skeles.push(
-      new Skele((windowWidth/overTime.length)*(i), 0, true, overTime[i].main.aqi)
+      new Skele((windowWidth/overTime.length)*(i), 0, 300, overTime[i].main.aqi)
       );
     console.log(i);
     i=0;
   }
-  // for (let i = 0; i < overTime.length; i++){
-  //   skeles.push(new Skele(
-  //     (windowWidth/overTime.length)*(i), 0, true, overTime[i].main.aqi));
-  //     // console.log((windowWidth/overTime.length)*(i));
-  //     console.log(i);
+}
+
+
+function randomDistortion(scale) {
+  let randomDistortion = map(random(-scale, scale), -5, 5, -6, 6);
+
+  // if (randomDistortion < 0) {
+  //   return randomDistortion * randomDistortion * randomDistortion;
   // }
+  return randomDistortion * randomDistortion * randomDistortion;
 }
 
 function windowResized() {
@@ -118,88 +115,67 @@ function windowResized() {
 }
 
 function parseData() {
-    aqi = weatherData.list[0].main.aqi;
-    overTime = weatherData.list; // data points we have for our given window of time
-    console.log(overTime);
+  aqi = weatherData.list[0].main.aqi;
+  overTime = weatherData.list; // data points we have for our given window of time
+  console.log(overTime);
 }
 
 class Skele {
-  constructor(_x, _y, _random, _crumple) {
-    // base size of skeleton on smaller screen dimension
-    this.size = 400;
-    this.location = createVector(_x, _y);
+  // x, y represents a center point
+  constructor(x, y, size, distortScale) {
+    this.size = size;
+    this.location = createVector(x, y);
     this.vel = createVector(0, 3);
     this.accel = createVector(0, 0.001);
-    this.crumpleFactor = map(_crumple, 1, 4, .175, 3);
+    this.distortScale = distortScale;
 
-    if (_random) {
-      this.size*=1.5;
-      this.head = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4));
-      this.shoulderLeft = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.elbowLeft = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.handLeft = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.shoulderRight = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.elbowRight = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.handRight = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.waistLeft = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.waistRight = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.kneeLeft = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.footLeft = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.kneeRight = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-      this.footRight = createVector(
-        max((random(this.size)/this.crumpleFactor) + (this.location.x - this.size/4),0),
-        (random(this.size)/this.crumpleFactor) + (this.location.y - this.size/4)
-      );
-    } else {
-      this.head = createVector(this.size / 2, 0);
-      this.shoulderLeft = createVector((2 * this.size) / 5, this.size / 15);
-      this.elbowLeft = createVector((2 * this.size) / 7, this.size / 7);
-      this.handLeft = createVector((2 * this.size) / 7, (2 * this.size) / 7);
-      this.shoulderRight = createVector((3 * this.size) / 5, this.size / 15);
-      this.elbowRight = createVector((5 * this.size) / 7, this.size / 7);
-      this.handRight = createVector((5 * this.size) / 7, (2 * this.size) / 7);
-      this.waistLeft = createVector((3 * this.size) / 7, this.size / 3);
-      this.waistRight = createVector((4 * this.size) / 7, this.size / 3);
-      this.kneeLeft = createVector((3 * this.size) / 8, (6 * this.size) / 12);
-      this.footLeft = createVector((3 * this.size) / 7, (8 * this.size) / 12);
-      this.kneeRight = createVector((4 * this.size) / 8, (6 * this.size) / 12);
-      this.footRight = createVector((4 * this.size) / 7, (8 * this.size) / 12);
-    }
+    // hands up, max vertical dimension
+    // this.head = createVector(x, y - 0.29 * size);
+
+    // this.shoulderLeft = createVector(x - 0.1 * size, y - 0.2 * size);
+    // this.shoulderRight = createVector(x + 0.1 * size, y - 0.2 * size);
+
+    // this.elbowLeft = createVector(x - 0.15 * size, y - 0.335 * size);
+    // this.elbowRight = createVector(x + 0.15 * size, y - 0.335 * size);
+
+    // this.handLeft = createVector(x - 0.15 * size, y - 0.5 * size);
+    // this.handRight = createVector(x + 0.15 * size, y - 0.5 * size);
+
+    // this.waistLeft = createVector(x - 0.075 * size, y + 0.07 * size);
+    // this.waistRight = createVector(x + 0.075 * size, y + 0.07 * size);
+
+    // this.kneeLeft = createVector(x + -0.09 * size, y + 0.265 * size);
+    // this.kneeRight = createVector(x + 0.09 * size, y + 0.265 * size);
+
+    // this.footLeft = createVector(x - 0.09 * size, y + 0.5 * size);
+    // this.footRight = createVector(x + 0.09 * size, y + 0.5 * size);
+
+    // this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
+
+    // hands down
+    this.head = createVector(x + randomDistortion(distortScale), y - 0.29 * size + randomDistortion(distortScale));
+
+    this.shoulderLeft = createVector(x - 0.1 * size + randomDistortion(distortScale), y - 0.2 * size + randomDistortion(distortScale));
+    this.shoulderRight = createVector(x + 0.1 * size + randomDistortion(distortScale), y - 0.2 * size + randomDistortion(distortScale));
+
+    this.elbowLeft = createVector(x - 0.15 * size + randomDistortion(distortScale), y - 0.06 * size + randomDistortion(distortScale));
+    this.elbowRight = createVector(x + 0.15 * size + randomDistortion(distortScale), y - 0.06 * size + randomDistortion(distortScale));
+
+    this.handLeft = createVector(x - 0.15 * size + randomDistortion(distortScale), y + 0.125 * size + randomDistortion(distortScale));
+    this.handRight = createVector(x + 0.15 * size + randomDistortion(distortScale), y + 0.125 * size + randomDistortion(distortScale));
+
+    this.waistLeft = createVector(x - 0.075 * size + randomDistortion(distortScale), y + 0.1 * size + randomDistortion(distortScale));
+    this.waistRight = createVector(x + 0.075 * size + randomDistortion(distortScale), y + 0.1 * size + randomDistortion(distortScale));
+
+    this.kneeLeft = createVector(x + -0.09 * size + randomDistortion(distortScale), y + 0.285 * size + randomDistortion(distortScale));
+    this.kneeRight = createVector(x + 0.09 * size + randomDistortion(distortScale), y + 0.285 * size + randomDistortion(distortScale));
+
+    this.footLeft = createVector(x - 0.09 * size + randomDistortion(distortScale), y + 0.5 * size + randomDistortion(distortScale));
+    this.footRight = createVector(x + 0.09 * size + randomDistortion(distortScale), y + 0.5 * size + randomDistortion(distortScale));
+
+    this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
+
+    this.keyPoints = [this.head, this.shoulderLeft, this.elbowLeft, this.handLeft, this.shoulderRight, this.elbowRight, this.handRight, this.waistLeft, this.waistRight, this.kneeLeft, this.footLeft, this.kneeRight, this.footRight];
 
     this.keyPointsPlayed = [false,false,false,false,false,false,false,false,false,false,false,false,false]
 
@@ -220,24 +196,17 @@ class Skele {
     ];
   }
 
-  update() {
-    this.keyPoints.forEach(p => {
-      p.y+=this.vel.y;
-      this.vel.add(this.accel);
-    })
-  }
-
   draw() {
     //colorMode(HSB);
     //let hue = 0;
-    push();
-   // translate(this.location.x, this.location.y);
-
     // draw connecting lines
-    strokeWeight(1);
-    //stroke(255);
+    strokeWeight(2);
     stroke(17, 9, 2);
     beginShape(LINES);
+
+    // head
+    vertex(this.head.x, this.head.y);
+    vertex(this.neck.x, this.neck.y);
 
     // left arm
     vertex(this.shoulderLeft.x, this.shoulderLeft.y);
@@ -292,8 +261,47 @@ class Skele {
       point(p.x, p.y);
       //hue += 360 / this.keyPoints.length;
     };
-    pop();
+
+    // draw center point
+    // stroke(255, 0, 0);
+    // strokeWeight(this.size / 15);
+    // point(this.location.x, this.location.y);
   }
+
+  update() {
+    this.keyPoints.forEach(p => {
+      p.y+=this.vel.y;
+      this.vel.add(this.accel);
+    })
+  }
+
+  updateSize(newSize) {
+    this.size = newSize;
+    this.head = createVector(this.location.x, this.location.y - 0.27 * newSize);
+
+    this.shoulderLeft = createVector(this.location.x - 0.1 * newSize, this.location.y - 0.2 * newSize);
+    this.shoulderRight = createVector(this.location.x + 0.1 * newSize, this.location.y - 0.2 * newSize);
+
+    this.elbowLeft = createVector(this.location.x - 0.15 * newSize, this.location.y - 0.335 * newSize);
+    this.elbowRight = createVector(this.location.x + 0.15 * newSize, this.location.y - 0.335 * newSize);
+
+    this.handLeft = createVector(this.location.x - 0.15 * newSize, this.location.y - 0.5 * newSize);
+    this.handRight = createVector(this.location.x + 0.15 * newSize, this.location.y - 0.5 * newSize);
+
+    this.waistLeft = createVector(this.location.x - 0.075 * newSize, this.location.y + 0.07 * newSize);
+    this.waistRight = createVector(this.location.x + 0.075 * newSize, this.location.y + 0.07 * newSize);
+
+    this.kneeLeft = createVector(this.location.x + -0.09 * newSize, this.location.y + 0.265 * newSize);
+    this.kneeRight = createVector(this.location.x + 0.09 * newSize, this.location.y + 0.265 * newSize);
+
+    this.footLeft = createVector(this.location.x - 0.09 * newSize, this.location.y + 0.5 * newSize);
+    this.footRight = createVector(this.location.x + 0.09 * newSize, this.location.y + 0.5 * newSize);
+
+    this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
+
+    this.keyPoints = [this.head, this.shoulderLeft, this.elbowLeft, this.handLeft, this.shoulderRight, this.elbowRight, this.handRight, this.waistLeft, this.waistRight, this.kneeLeft, this.footLeft, this.kneeRight, this.footRight];
+  }
+
 }
 
 function onEnabled() {
