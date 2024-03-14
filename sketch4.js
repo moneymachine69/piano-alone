@@ -10,6 +10,7 @@ let lon;
 let overTime;
 let skeleIndex = 0;
 let threshold;
+let fallRate = 240;
 
 function preload() {
   lat = 41.878113;
@@ -38,12 +39,13 @@ function parseData() {
   for (let i = 0; i < overTime.length; i++) {
     const aqi = weatherData.list[i].main.aqi;
     console.log(aqi);
-    skeles.push(new Skele(width / 2, -500, 400, aqi));
+    const size = min(width/1.325, height/1.325)
+    skeles.push(new Skele(width / 2, -size, size, aqi));
   }
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
+  createCanvas(1080, 1920);
   background(0);
 
   //skeles.push(new Skele(0, 50, 300, 1));
@@ -63,10 +65,13 @@ function setup() {
 function draw() {
   background(249, 239, 207); // off white
 
-  // every 2 seconds, trigger the next skele to fall by increasing the skeleIndex and setting skele.isFalling to true
-  if (frameCount % 120 == 0 && skeleIndex < overTime.length) {
+  // every X seconds, trigger the next skele to fall by increasing the skeleIndex and setting skele.isFalling to true
+  if (frameCount % fallRate == 0 && skeleIndex < overTime.length) {
     skeles[skeleIndex].isFalling = true;
     skeleIndex++;
+
+    // decreasing fallRate actually makes them fall more frequently...
+    fallRate--;
   }
 
   skeles.forEach((skele) => {
@@ -75,7 +80,7 @@ function draw() {
       skele.update();
     }
 
-    if (skele.location.y > height + 500) {
+    if (skele.location.y > height*2) {
       skeles.shift();
     }
 
@@ -112,18 +117,18 @@ function randomDistortion(scale) {
   return randomDistortion * randomDistortion * randomDistortion;
 }
 
-function windowResized() {
-  background(249, 239, 207); // off white
-  resizeCanvas(windowWidth, windowHeight);
-}
+// function windowResized() {
+//   background(249, 239, 207); // off white
+//   resizeCanvas(windowWidth, windowHeight);
+// }
 
 class Skele {
   // x, y represents a center point
   constructor(x, y, size, distortScale) {
     this.size = size;
     this.location = createVector(x, y);
-    this.vel = createVector(0, 3);
-    this.accel = createVector(0, 0.001);
+    this.vel = createVector(0, 1);
+    this.accel = createVector(0, 0.003);
     this.distortScale = distortScale;
     this.isFalling = false;
 
