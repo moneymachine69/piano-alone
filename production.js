@@ -17,6 +17,7 @@ let fallRateDelta = 2;
 let pieceDuration = 0;
 let startColor;
 let endColor;
+let bgColor;
 
 function preload() {
   lat = 41.878113;
@@ -67,7 +68,7 @@ function parseData() {
 }
 
 function setup() {
-  createCanvas(1080, 1920);
+  createCanvas(windowWidth, windowHeight);
   background(0);
   frameRate(60);
 
@@ -93,7 +94,8 @@ function setup() {
 function draw() {
   // set the background by interpolating between a start color (white) and an end color (always-already-apocalypse orange) based on the elapsed time and total duration of the sketch
   let colorLerpAmount = map(frameCount, 0, pieceDuration, 0, 1);
-  background(lerpColor(startColor, endColor, colorLerpAmount));
+  bgColor = lerpColor(startColor, endColor, colorLerpAmount)
+  background(bgColor);
 
   // every X seconds, trigger the next skele to fall by increasing the skeleIndex and setting skele.isFalling to true
   if (frameCount % fallRate == 0 && skeleIndex < overTime.length) {
@@ -161,10 +163,10 @@ function randomDistortion(scale) {
   return randomDistortion * randomDistortion * randomDistortion;
 }
 
-// function windowResized() {
-//   background(249, 239, 207); // off white
-//   resizeCanvas(windowWidth, windowHeight);
-// }
+function windowResized() {
+  background(bgColor);
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 class Skele {
   // x, y represents a center point
