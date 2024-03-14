@@ -11,7 +11,7 @@ let lon;
 let overTime;
 let skeleIndex = 0;
 let threshold;
-let fallRate = 200;
+let fallRate = 240;
 let fallRateDelta = 1;
 let d = fallRate;
 let pieceDuration = 0;
@@ -46,9 +46,9 @@ function parseData() {
   for (let i = 0; i < overTime.length; i++) {
     const aqi = weatherData.list[i].main.aqi;
     //console.log(aqi);
-    const size = min(width / 1.125, height / 1.125);
+    const size = min(width, height);
     const xVariation = random(-width / 20, width / 20);
-    skeles.push(new Skele(width / 2 + xVariation, -size, size, aqi));
+    skeles.push(new Skele(width / 2 + xVariation, -size*1.5, size, aqi));
   }
 
   // calculate duration of piece based on how many skeletons and
@@ -70,7 +70,7 @@ function setup() {
   parseData();
 
   // threshold = (3 * height) / 4;
-  threshold = height;
+  threshold = height-width/80;
 
   WebMidi.enable()
     .then(onEnabled)
@@ -142,7 +142,7 @@ function drawMidiLines() {
 }
 
 function randomDistortion(scale) {
-  let randomDistortion = map(random(-scale, scale), -5, 5, -6, 6);
+  let randomDistortion = map(random(-scale, scale), -5, 5, -7, 7);
   return randomDistortion * randomDistortion * randomDistortion;
 }
 
@@ -157,7 +157,7 @@ class Skele {
     this.size = size;
     this.location = createVector(x, y);
     this.vel = createVector(0, 1);
-    this.accel = createVector(0, 0.004);
+    this.accel = createVector(0, 0.003);
     this.distortScale = distortScale;
     this.isFalling = false;
 
@@ -273,8 +273,6 @@ class Skele {
   }
 
   draw() {
-    //colorMode(HSB);
-    //let hue = 0;
     // draw connecting lines
     strokeWeight(3);
     stroke(17, 9, 2);
@@ -334,7 +332,7 @@ class Skele {
       strokeWeight(this.size / 40);
       //stroke(hue, 50, 100);
       if (this.keyPointsPlayed[i]) {
-        stroke(255, 50, 50);
+        stroke(endColor);
       } else {
         stroke(17, 9, 2);
       }
@@ -344,8 +342,11 @@ class Skele {
 
   update() {
     this.keyPoints.forEach((p) => {
-      p.y += this.vel.y;
-      this.vel.add(this.accel);
+      if(p.y < height - this.size/80) {
+        p.y += this.vel.y;
+        this.vel.add(this.accel);
+      }
+      
     });
     this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
   }
