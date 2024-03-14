@@ -18,7 +18,6 @@ let pieceDuration = 0;
 let startColor;
 let endColor;
 
-
 function preload() {
   lat = 41.878113;
   lon = -87.629799;
@@ -34,29 +33,28 @@ function preload() {
   // NYC 6/10/23: 1686409200
   const START_TIME = 1686150000;
   const END_TIME = 1686322800;
-  
-  const url =
-    `http://api.openweathermap.org/data/2.5/air_pollution/history?lat=40.73&lon=-73.9&start=${START_TIME}&end=${END_TIME}&appid=87fb783a54817f1793f0556477730e7c`; 
-    // example NYC 6/8/23 to 6/10/23
-  console.log(url);
+
+  const url = `http://api.openweathermap.org/data/2.5/air_pollution/history?lat=40.73&lon=-73.9&start=${START_TIME}&end=${END_TIME}&appid=87fb783a54817f1793f0556477730e7c`;
+  // example NYC 6/8/23 to 6/10/23
+  //console.log(url);
   weatherData = loadJSON(url);
 }
 
 function parseData() {
   overTime = weatherData.list; // data points we have for our given window of time
-  console.log("overtime", overTime);
+  //console.log("overtime", overTime);
   for (let i = 0; i < overTime.length; i++) {
     const aqi = weatherData.list[i].main.aqi;
-    console.log(aqi);
-    const size = min(width/1.125, height/1.125)
-    const xVariation = random(-width/20, width/20);
+    //console.log(aqi);
+    const size = min(width / 1.125, height / 1.125);
+    const xVariation = random(-width / 20, width / 20);
     skeles.push(new Skele(width / 2 + xVariation, -size, size, aqi));
   }
 
-  // calculate duration of piece based on how many skeletons and 
-  for(let i = 0; i < overTime.length; i++) {
+  // calculate duration of piece based on how many skeletons and
+  for (let i = 0; i < overTime.length; i++) {
     pieceDuration += d;
-    d-=fallRateDelta;
+    d -= fallRateDelta;
   }
 }
 
@@ -68,42 +66,40 @@ function setup() {
   startColor = color(255);
   endColor = color(217, 108, 5);
 
-  console.log(weatherData);
+  //console.log(weatherData);
   parseData();
 
   // threshold = (3 * height) / 4;
   threshold = height;
-  
+
   WebMidi.enable()
     .then(onEnabled)
     .catch((err) => alert(err));
 
-  for(let i = 0; i < 108; i++) {
+  for (let i = 0; i < 108; i++) {
     let x = map(i, 0, 108, 0, width);
-    zones.push(new MidiZones(x))
+    zones.push(new MidiZones(x));
   }
 }
 
 function draw() {
-
   // set the background by interpolating between a start color (white) and an end color (always-already-apocalypse orange) based on the elapsed time and total duration of the sketch
   let colorLerpAmount = map(frameCount, 0, pieceDuration, 0, 1);
   background(lerpColor(startColor, endColor, colorLerpAmount));
 
-  
   // every X seconds, trigger the next skele to fall by increasing the skeleIndex and setting skele.isFalling to true
   if (frameCount % fallRate == 0 && skeleIndex < overTime.length) {
     skeles[skeleIndex].isFalling = true;
     skeleIndex++;
 
     // decreasing fallRate actually makes them fall more frequently...
-    fallRate-=fallRateDelta;
+    fallRate -= fallRateDelta;
   }
 
-  zones.forEach(z => {
+  zones.forEach((z) => {
     z.draw();
     z.update();
-  })
+  });
 
   skeles.forEach((skele) => {
     if (skele.isFalling) {
@@ -111,7 +107,7 @@ function draw() {
       skele.update();
     }
 
-    if (skele.location.y > height*2) {
+    if (skele.location.y > height * 2) {
       skeles.shift();
     }
 
@@ -124,21 +120,17 @@ function draw() {
         let zoneIndex = floor(map(p.x, 0, width, 0, 108));
         zones[zoneIndex].alpha = 200;
 
+        const NOTE_TO_PLAY = int(map(p.x, 0, width, 0, 108));
 
-        //myOutput.playNote(int(map(p.x, 0, width, 0, 108)), 1, {duration: 1000, rawAttack: 100});
+        console.log(NOTE_TO_PLAY);
 
-        // console.log(int(map(p.x, 0, width, 0, 108)));
-        // remember to pass ints to midi
+        // play note if MIDI is connected
+        if (myOutput) {
+          myOutput.playNote(NOTE_TO_PLAY, 1, {duration: 1000, rawAttack: 100});
+        }
       }
     }
   });
-
-  strokeWeight(2);
-  //stroke(255);
-  stroke(17, 9, 2);
-  //line(0, threshold, width, threshold);
-
-  //drawMidiLines();
 }
 
 function drawMidiLines() {
@@ -438,19 +430,19 @@ class Skele {
 
 class MidiZones {
   constructor(x) {
-    this.position = createVector(x, 0)
+    this.position = createVector(x, 0);
     this.alpha = 0;
   }
 
   draw() {
-    fill(230, 108, 5, this.alpha)
+    fill(230, 108, 5, this.alpha);
     noStroke();
-    rect(this.position.x, 0, width/108, height)
+    rect(this.position.x, 0, width / 108, height);
   }
 
   update() {
-    if(this.alpha > 0) {
-      this.alpha-=3;
+    if (this.alpha > 0) {
+      this.alpha -= 3;
     }
   }
 }
