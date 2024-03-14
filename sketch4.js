@@ -1,4 +1,5 @@
 let skeles = [];
+let zones = [];
 
 //MIDI
 let myOutput; //the variable in charge of out MIDI output
@@ -10,12 +11,13 @@ let lon;
 let overTime;
 let skeleIndex = 0;
 let threshold;
-let fallRate = 240;
+let fallRate = 200;
 let fallRateDelta = 1;
 let d = fallRate;
 let pieceDuration = 0;
 let startColor;
 let endColor;
+
 
 function preload() {
   lat = 41.878113;
@@ -45,7 +47,8 @@ function parseData() {
     const aqi = weatherData.list[i].main.aqi;
     console.log(aqi);
     const size = min(width/1.325, height/1.325)
-    skeles.push(new Skele(width / 2, -size, size, aqi));
+    const xVariation = random(-width/20, width/20);
+    skeles.push(new Skele(width / 2 + xVariation, -size, size, aqi));
   }
 
   // calculate duration of piece based on how many skeletons and 
@@ -66,11 +69,17 @@ function setup() {
   console.log(weatherData);
   parseData();
 
-  threshold = (3 * height) / 4;
-
+  // threshold = (3 * height) / 4;
+  threshold = height;
+  
   WebMidi.enable()
     .then(onEnabled)
     .catch((err) => alert(err));
+
+  for(let i = 0; i < 108; i++) {
+    let x = map(i, 0, 108, 0, width);
+    zones.push(new MidiZones(x))
+  }
 }
 
 function draw() {
@@ -89,6 +98,11 @@ function draw() {
     fallRate-=fallRateDelta;
   }
 
+  zones.forEach(z => {
+    z.draw();
+    z.update();
+  })
+
   skeles.forEach((skele) => {
     if (skele.isFalling) {
       skele.draw();
@@ -104,7 +118,13 @@ function draw() {
       let p = skele.keyPoints[i];
       if (p.y > threshold && !skele.keyPointsPlayed[i]) {
         skele.keyPointsPlayed[i] = true;
+
+        let zoneIndex = floor(map(p.x, 0, width, 0, 108));
+        zones[zoneIndex].alpha = 200;
+
+
         //myOutput.playNote(int(map(p.x, 0, width, 0, 108)), 1, {duration: 1000, rawAttack: 100});
+
         // console.log(int(map(p.x, 0, width, 0, 108)));
         // remember to pass ints to midi
       }
@@ -114,12 +134,12 @@ function draw() {
   strokeWeight(2);
   //stroke(255);
   stroke(17, 9, 2);
-  line(0, threshold, width, threshold);
+  //line(0, threshold, width, threshold);
 
-  drawMidiZones();
+  //drawMidiLines();
 }
 
-function drawMidiZones() {
+function drawMidiLines() {
   for (let x = 0; x < width; x += width / 108) {
     strokeWeight(0.5);
     //stroke(255);
@@ -143,7 +163,7 @@ class Skele {
     this.size = size;
     this.location = createVector(x, y);
     this.vel = createVector(0, 1);
-    this.accel = createVector(0, 0.003);
+    this.accel = createVector(0, 0.004);
     this.distortScale = distortScale;
     this.isFalling = false;
 
@@ -411,6 +431,25 @@ class Skele {
       this.kneeRight,
       this.footRight,
     ];
+  }
+}
+
+class MidiZones {
+  constructor(x) {
+    this.position = createVector(x, 0)
+    this.alpha = 0;
+  }
+
+  draw() {
+    fill(230, 108, 5, this.alpha)
+    noStroke();
+    rect(this.position.x, 0, width/108, height)
+  }
+
+  update() {
+    if(this.alpha > 0) {
+      this.alpha-=3;
+    }
   }
 }
 
