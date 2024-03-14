@@ -11,7 +11,7 @@ let lon;
 let overTime;
 let skeleIndex = 0;
 let threshold;
-let fallRate = 260; // how many frames 
+let fallRate = 260; // how many frames
 let fallRateMin = 150;
 let fallRateDelta = 2;
 let pieceDuration = 0;
@@ -50,7 +50,7 @@ function parseData() {
   for (let i = 0; i < overTime.length; i++) {
     const aqi = weatherData.list[i].main.aqi;
     //console.log(aqi);
-    const size = min(width/1.25, height/1.25);
+    const size = min(width / 1.25, height / 1.25);
     const xVariation = random(-width / 15, width / 15);
     skeles.push(new Skele(width / 2 + xVariation, -size * 1.5, size, aqi));
   }
@@ -64,7 +64,6 @@ function parseData() {
     } else {
       pieceDuration += fallRateMin;
     }
-    
   }
 }
 
@@ -90,12 +89,14 @@ function setup() {
     let x = map(i, 0, 108, 0, width);
     zones.push(new MidiZones(x));
   }
+
+  noLoop();
 }
 
 function draw() {
   // set the background by interpolating between a start color (white) and an end color (always-already-apocalypse orange) based on the elapsed time and total duration of the sketch
   let colorLerpAmount = map(frameCount, 0, pieceDuration, 0, 1);
-  bgColor = lerpColor(startColor, endColor, colorLerpAmount)
+  bgColor = lerpColor(startColor, endColor, colorLerpAmount);
   background(bgColor);
 
   // every X seconds, trigger the next skele to fall by increasing the skeleIndex and setting skele.isFalling to true
@@ -180,114 +181,33 @@ class Skele {
     this.isFalling = false;
 
     // hands down
-    this.head = createVector(
-      x + randomDistortion(distortScale),
-      y - 0.29 * size + randomDistortion(distortScale)
-    );
+    this.head = createVector(x + randomDistortion(distortScale), y - 0.29 * size + randomDistortion(distortScale));
 
-    this.shoulderLeft = createVector(
-      x - 0.1 * size + randomDistortion(distortScale),
-      y - 0.2 * size + randomDistortion(distortScale)
-    );
-    this.shoulderRight = createVector(
-      x + 0.1 * size + randomDistortion(distortScale),
-      y - 0.2 * size + randomDistortion(distortScale)
-    );
+    this.shoulderLeft = createVector(x - 0.1 * size + randomDistortion(distortScale), y - 0.2 * size + randomDistortion(distortScale));
+    this.shoulderRight = createVector(x + 0.1 * size + randomDistortion(distortScale), y - 0.2 * size + randomDistortion(distortScale));
 
-    this.elbowLeft = createVector(
-      x - 0.15 * size + randomDistortion(distortScale),
-      y - 0.06 * size + randomDistortion(distortScale)
-    );
-    this.elbowRight = createVector(
-      x + 0.15 * size + randomDistortion(distortScale),
-      y - 0.06 * size + randomDistortion(distortScale)
-    );
+    this.elbowLeft = createVector(x - 0.15 * size + randomDistortion(distortScale), y - 0.06 * size + randomDistortion(distortScale));
+    this.elbowRight = createVector(x + 0.15 * size + randomDistortion(distortScale), y - 0.06 * size + randomDistortion(distortScale));
 
-    this.handLeft = createVector(
-      x - 0.15 * size + randomDistortion(distortScale),
-      y + 0.125 * size + randomDistortion(distortScale)
-    );
-    this.handRight = createVector(
-      x + 0.15 * size + randomDistortion(distortScale),
-      y + 0.125 * size + randomDistortion(distortScale)
-    );
+    this.handLeft = createVector(x - 0.15 * size + randomDistortion(distortScale), y + 0.125 * size + randomDistortion(distortScale));
+    this.handRight = createVector(x + 0.15 * size + randomDistortion(distortScale), y + 0.125 * size + randomDistortion(distortScale));
 
-    this.waistLeft = createVector(
-      x - 0.075 * size + randomDistortion(distortScale),
-      y + 0.1 * size + randomDistortion(distortScale)
-    );
-    this.waistRight = createVector(
-      x + 0.075 * size + randomDistortion(distortScale),
-      y + 0.1 * size + randomDistortion(distortScale)
-    );
+    this.waistLeft = createVector(x - 0.075 * size + randomDistortion(distortScale), y + 0.1 * size + randomDistortion(distortScale));
+    this.waistRight = createVector(x + 0.075 * size + randomDistortion(distortScale), y + 0.1 * size + randomDistortion(distortScale));
 
-    this.kneeLeft = createVector(
-      x + -0.09 * size + randomDistortion(distortScale),
-      y + 0.285 * size + randomDistortion(distortScale)
-    );
-    this.kneeRight = createVector(
-      x + 0.09 * size + randomDistortion(distortScale),
-      y + 0.285 * size + randomDistortion(distortScale)
-    );
+    this.kneeLeft = createVector(x + -0.09 * size + randomDistortion(distortScale), y + 0.285 * size + randomDistortion(distortScale));
+    this.kneeRight = createVector(x + 0.09 * size + randomDistortion(distortScale), y + 0.285 * size + randomDistortion(distortScale));
 
-    this.footLeft = createVector(
-      x - 0.09 * size + randomDistortion(distortScale),
-      y + 0.5 * size + randomDistortion(distortScale)
-    );
-    this.footRight = createVector(
-      x + 0.09 * size + randomDistortion(distortScale),
-      y + 0.5 * size + randomDistortion(distortScale)
-    );
+    this.footLeft = createVector(x - 0.09 * size + randomDistortion(distortScale), y + 0.5 * size + randomDistortion(distortScale));
+    this.footRight = createVector(x + 0.09 * size + randomDistortion(distortScale), y + 0.5 * size + randomDistortion(distortScale));
 
     this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
 
-    this.keyPoints = [
-      this.head,
-      this.shoulderLeft,
-      this.shoulderRight,
-      this.elbowLeft,
-      this.elbowRight,
-      this.handLeft,
-      this.handRight,
-      this.waistLeft,
-      this.waistRight,
-      this.kneeLeft,
-      this.kneeRight,
-      this.footLeft,
-      this.footRight,
-    ];
+    this.keyPoints = [this.head, this.shoulderLeft, this.shoulderRight, this.elbowLeft, this.elbowRight, this.handLeft, this.handRight, this.waistLeft, this.waistRight, this.kneeLeft, this.kneeRight, this.footLeft, this.footRight];
 
-    this.keyPointsPlayed = [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-    ];
+    this.keyPointsPlayed = [false, false, false, false, false, false, false, false, false, false, false, false, false];
 
-    this.keyPoints = [
-      this.head,
-      this.shoulderLeft,
-      this.elbowLeft,
-      this.handLeft,
-      this.shoulderRight,
-      this.elbowRight,
-      this.handRight,
-      this.waistLeft,
-      this.waistRight,
-      this.kneeLeft,
-      this.footLeft,
-      this.kneeRight,
-      this.footRight,
-    ];
+    this.keyPoints = [this.head, this.shoulderLeft, this.elbowLeft, this.handLeft, this.shoulderRight, this.elbowRight, this.handRight, this.waistLeft, this.waistRight, this.kneeLeft, this.footLeft, this.kneeRight, this.footRight];
   }
 
   draw() {
@@ -372,77 +292,27 @@ class Skele {
     this.size = newSize;
     this.head = createVector(this.location.x, this.location.y - 0.27 * newSize);
 
-    this.shoulderLeft = createVector(
-      this.location.x - 0.1 * newSize,
-      this.location.y - 0.2 * newSize
-    );
-    this.shoulderRight = createVector(
-      this.location.x + 0.1 * newSize,
-      this.location.y - 0.2 * newSize
-    );
+    this.shoulderLeft = createVector(this.location.x - 0.1 * newSize, this.location.y - 0.2 * newSize);
+    this.shoulderRight = createVector(this.location.x + 0.1 * newSize, this.location.y - 0.2 * newSize);
 
-    this.elbowLeft = createVector(
-      this.location.x - 0.15 * newSize,
-      this.location.y - 0.335 * newSize
-    );
-    this.elbowRight = createVector(
-      this.location.x + 0.15 * newSize,
-      this.location.y - 0.335 * newSize
-    );
+    this.elbowLeft = createVector(this.location.x - 0.15 * newSize, this.location.y - 0.335 * newSize);
+    this.elbowRight = createVector(this.location.x + 0.15 * newSize, this.location.y - 0.335 * newSize);
 
-    this.handLeft = createVector(
-      this.location.x - 0.15 * newSize,
-      this.location.y - 0.5 * newSize
-    );
-    this.handRight = createVector(
-      this.location.x + 0.15 * newSize,
-      this.location.y - 0.5 * newSize
-    );
+    this.handLeft = createVector(this.location.x - 0.15 * newSize, this.location.y - 0.5 * newSize);
+    this.handRight = createVector(this.location.x + 0.15 * newSize, this.location.y - 0.5 * newSize);
 
-    this.waistLeft = createVector(
-      this.location.x - 0.075 * newSize,
-      this.location.y + 0.07 * newSize
-    );
-    this.waistRight = createVector(
-      this.location.x + 0.075 * newSize,
-      this.location.y + 0.07 * newSize
-    );
+    this.waistLeft = createVector(this.location.x - 0.075 * newSize, this.location.y + 0.07 * newSize);
+    this.waistRight = createVector(this.location.x + 0.075 * newSize, this.location.y + 0.07 * newSize);
 
-    this.kneeLeft = createVector(
-      this.location.x + -0.09 * newSize,
-      this.location.y + 0.265 * newSize
-    );
-    this.kneeRight = createVector(
-      this.location.x + 0.09 * newSize,
-      this.location.y + 0.265 * newSize
-    );
+    this.kneeLeft = createVector(this.location.x + -0.09 * newSize, this.location.y + 0.265 * newSize);
+    this.kneeRight = createVector(this.location.x + 0.09 * newSize, this.location.y + 0.265 * newSize);
 
-    this.footLeft = createVector(
-      this.location.x - 0.09 * newSize,
-      this.location.y + 0.5 * newSize
-    );
-    this.footRight = createVector(
-      this.location.x + 0.09 * newSize,
-      this.location.y + 0.5 * newSize
-    );
+    this.footLeft = createVector(this.location.x - 0.09 * newSize, this.location.y + 0.5 * newSize);
+    this.footRight = createVector(this.location.x + 0.09 * newSize, this.location.y + 0.5 * newSize);
 
     this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
 
-    this.keyPoints = [
-      this.head,
-      this.shoulderLeft,
-      this.elbowLeft,
-      this.handLeft,
-      this.shoulderRight,
-      this.elbowRight,
-      this.handRight,
-      this.waistLeft,
-      this.waistRight,
-      this.kneeLeft,
-      this.footLeft,
-      this.kneeRight,
-      this.footRight,
-    ];
+    this.keyPoints = [this.head, this.shoulderLeft, this.elbowLeft, this.handLeft, this.shoulderRight, this.elbowRight, this.handRight, this.waistLeft, this.waistRight, this.kneeLeft, this.footLeft, this.kneeRight, this.footRight];
   }
 }
 
@@ -469,14 +339,10 @@ function onEnabled() {
   console.log("WebMIDI Enabled");
 
   // Inputs
-  WebMidi.inputs.forEach((input) =>
-    console.log("Input: ", input.manufacturer, input.name)
-  );
+  WebMidi.inputs.forEach((input) => console.log("Input: ", input.manufacturer, input.name));
 
   // Outputs
-  WebMidi.outputs.forEach((output) =>
-    console.log("Output: ", output.manufacturer, output.name)
-  );
+  WebMidi.outputs.forEach((output) => console.log("Output: ", output.manufacturer, output.name));
 
   //Looking at the first output available to us
   console.log(WebMidi.outputs[0]);
@@ -485,15 +351,13 @@ function onEnabled() {
   myOutput = WebMidi.outputs[0];
 }
 
-
-
 // UTILITIES
 
 // select MIDI channel from dropdown
 let midiChannel;
 
- // Function to update the global variable when an option is selected
- function updateMidiChannel() {
+// Function to update the global variable when an option is selected
+function updateMidiChannel() {
   midiChannel = midiChannelSelect.value;
   myOutput = WebMidi.outputs[midiChannel];
   console.log("Selected MIDI Channel: " + midiChannel);
@@ -502,7 +366,7 @@ let midiChannel;
 // Add event listener to the dropdown menu
 midiChannelSelect.addEventListener("change", updateMidiChannel);
 
-start.addEventListener("click", function(){
+start.addEventListener("click", function () {
   loop();
   utilities.style.display = "none";
-})
+});
