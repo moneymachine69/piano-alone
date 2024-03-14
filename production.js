@@ -50,7 +50,7 @@ function parseData() {
   for (let i = 0; i < overTime.length; i++) {
     const aqi = weatherData.list[i].main.aqi;
     //console.log(aqi);
-    const size = min(width, height);
+    const size = min(width/1.25, height/1.25);
     const xVariation = random(-width / 15, width / 15);
     skeles.push(new Skele(width / 2 + xVariation, -size * 1.5, size, aqi));
   }
