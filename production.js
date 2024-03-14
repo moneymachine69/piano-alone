@@ -29,13 +29,14 @@ function preload() {
   // started the date a day earlier to better build up to the climactic aqi 5.
   // 1/2 day == 43200
   // 1 day == 86400
-  // NYC 6/7/23 (earlier): 1686106800
+  // NYC 6/7/23 12AM: 1686110400
   // NYC 6/7/23: 1686150000
   // NYC 6/8/23: 1686236400
-  // NYC 6/9/23: 1686322800
+  // NYC 6/9/23 11AM: 1686322800
+  // NYC 6/9/23 11PM: 1686366000
   // NYC 6/10/23: 1686409200
-  const START_TIME = 1686106800;
-  const END_TIME = 1686322800;
+  const START_TIME = 1686110400;
+  const END_TIME = 1686366000;
 
   const url = `https://api.openweathermap.org/data/2.5/air_pollution/history?lat=40.73&lon=-73.9&start=${START_TIME}&end=${END_TIME}&appid=87fb783a54817f1793f0556477730e7c`;
   // example NYC 6/8/23 to 6/10/23
