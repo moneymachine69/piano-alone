@@ -37,7 +37,7 @@ function preload() {
   const START_TIME = 1686106800;
   const END_TIME = 1686322800;
 
-  const url = `http://api.openweathermap.org/data/2.5/air_pollution/history?lat=40.73&lon=-73.9&start=${START_TIME}&end=${END_TIME}&appid=87fb783a54817f1793f0556477730e7c`;
+  const url = `https://api.openweathermap.org/data/2.5/air_pollution/history?lat=40.73&lon=-73.9&start=${START_TIME}&end=${END_TIME}&appid=87fb783a54817f1793f0556477730e7c`;
   // example NYC 6/8/23 to 6/10/23
   //console.log(url);
   weatherData = loadJSON(url);
