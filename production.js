@@ -11,9 +11,9 @@ let lon;
 let overTime;
 let skeleIndex = 0;
 let threshold;
-let fallRate = 240;
-let fallRateDelta = 1;
-let d = fallRate;
+let fallRate = 260; // how many frames 
+let fallRateMin = 150;
+let fallRateDelta = 2;
 let pieceDuration = 0;
 let startColor;
 let endColor;
@@ -26,12 +26,14 @@ function preload() {
   // let url = "http://api.openweathermap.org/data/2.5/air_pollution/history?lat=" + lat + "&lon=" + lon + "&start=1687791600&end=1687964400&appid=87fb783a54817f1793f0556477730e7c";
 
   // started the date a day earlier to better build up to the climactic aqi 5.
+  // 1/2 day == 43200
   // 1 day == 86400
+  // NYC 6/7/23 (earlier): 1686106800
   // NYC 6/7/23: 1686150000
   // NYC 6/8/23: 1686236400
   // NYC 6/9/23: 1686322800
   // NYC 6/10/23: 1686409200
-  const START_TIME = 1686150000;
+  const START_TIME = 1686106800;
   const END_TIME = 1686322800;
 
   const url = `http://api.openweathermap.org/data/2.5/air_pollution/history?lat=40.73&lon=-73.9&start=${START_TIME}&end=${END_TIME}&appid=87fb783a54817f1793f0556477730e7c`;
@@ -47,14 +49,20 @@ function parseData() {
     const aqi = weatherData.list[i].main.aqi;
     //console.log(aqi);
     const size = min(width, height);
-    const xVariation = random(-width / 20, width / 20);
-    skeles.push(new Skele(width / 2 + xVariation, -size*1.5, size, aqi));
+    const xVariation = random(-width / 15, width / 15);
+    skeles.push(new Skele(width / 2 + xVariation, -size * 1.5, size, aqi));
   }
 
+  let d = fallRate;
   // calculate duration of piece based on how many skeletons and
   for (let i = 0; i < overTime.length; i++) {
-    pieceDuration += d;
-    d -= fallRateDelta;
+    if (d > fallRateMin) {
+      pieceDuration += d;
+      d -= fallRateDelta;
+    } else {
+      pieceDuration += fallRateMin;
+    }
+    
   }
 }
 
@@ -70,7 +78,7 @@ function setup() {
   parseData();
 
   // threshold = (3 * height) / 4;
-  threshold = height-width/80;
+  threshold = height - width / 80;
 
   WebMidi.enable()
     .then(onEnabled)
@@ -91,9 +99,12 @@ function draw() {
   if (frameCount % fallRate == 0 && skeleIndex < overTime.length) {
     skeles[skeleIndex].isFalling = true;
     skeleIndex++;
+    //console.log(fallRate);
 
     // decreasing fallRate actually makes them fall more frequently...
-    fallRate -= fallRateDelta;
+    if (fallRate > fallRateMin) {
+      fallRate -= fallRateDelta;
+    }
   }
 
   zones.forEach((z) => {
@@ -117,16 +128,20 @@ function draw() {
       if (p.y > threshold && !skele.keyPointsPlayed[i]) {
         skele.keyPointsPlayed[i] = true;
 
-        let zoneIndex = floor(map(p.x, 0, width, 0, 108));
+        let zoneIndex = floor(map(p.x, 0, width, 0, 107, true));
+        //console.log(zoneIndex)
         zones[zoneIndex].alpha = 200;
 
         const NOTE_TO_PLAY = int(map(p.x, 0, width, 0, 108));
 
-        console.log(NOTE_TO_PLAY);
+        //console.log(NOTE_TO_PLAY);
 
         // play note if MIDI is connected
         if (myOutput) {
-          myOutput.playNote(NOTE_TO_PLAY, 1, {duration: 1000, rawAttack: 100});
+          myOutput.playNote(NOTE_TO_PLAY, 1, {
+            duration: 1000,
+            rawAttack: 100,
+          });
         }
       }
     }
@@ -142,7 +157,7 @@ function drawMidiLines() {
 }
 
 function randomDistortion(scale) {
-  let randomDistortion = map(random(-scale, scale), -5, 5, -7, 7);
+  let randomDistortion = map(random(-scale, scale), -5, 5, -8, 8);
   return randomDistortion * randomDistortion * randomDistortion;
 }
 
@@ -332,7 +347,7 @@ class Skele {
       strokeWeight(this.size / 40);
       //stroke(hue, 50, 100);
       if (this.keyPointsPlayed[i]) {
-        stroke(endColor);
+        stroke(217, 108, 5);
       } else {
         stroke(17, 9, 2);
       }
@@ -342,11 +357,10 @@ class Skele {
 
   update() {
     this.keyPoints.forEach((p) => {
-      if(p.y < height - this.size/80) {
+      if (p.y < height - this.size / 80) {
         p.y += this.vel.y;
         this.vel.add(this.accel);
       }
-      
     });
     this.neck = p5.Vector.lerp(this.shoulderLeft, this.shoulderRight, 0.5);
   }
@@ -443,7 +457,7 @@ class MidiZones {
 
   update() {
     if (this.alpha > 0) {
-      this.alpha -= 3;
+      this.alpha -= 4;
     }
   }
 }
