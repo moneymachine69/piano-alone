@@ -11,6 +11,11 @@ let overTime;
 let skeleIndex = 0;
 let threshold;
 let fallRate = 240;
+let fallRateDelta = 1;
+let d = fallRate;
+let pieceDuration = 0;
+let startColor;
+let endColor;
 
 function preload() {
   lat = 41.878113;
@@ -42,13 +47,21 @@ function parseData() {
     const size = min(width/1.325, height/1.325)
     skeles.push(new Skele(width / 2, -size, size, aqi));
   }
+
+  // calculate duration of piece based on how many skeletons and 
+  for(let i = 0; i < overTime.length; i++) {
+    pieceDuration += d;
+    d-=fallRateDelta;
+  }
 }
 
 function setup() {
   createCanvas(1080, 1920);
   background(0);
+  frameRate(60);
 
-  //skeles.push(new Skele(0, 50, 300, 1));
+  startColor = color(255);
+  endColor = color(217, 108, 5);
 
   console.log(weatherData);
   parseData();
@@ -58,20 +71,22 @@ function setup() {
   WebMidi.enable()
     .then(onEnabled)
     .catch((err) => alert(err));
-
-  i = 0;
 }
 
 function draw() {
-  background(249, 239, 207); // off white
 
+  // set the background by interpolating between a start color (white) and an end color (always-already-apocalypse orange) based on the elapsed time and total duration of the sketch
+  let colorLerpAmount = map(frameCount, 0, pieceDuration, 0, 1);
+  background(lerpColor(startColor, endColor, colorLerpAmount));
+
+  
   // every X seconds, trigger the next skele to fall by increasing the skeleIndex and setting skele.isFalling to true
   if (frameCount % fallRate == 0 && skeleIndex < overTime.length) {
     skeles[skeleIndex].isFalling = true;
     skeleIndex++;
 
     // decreasing fallRate actually makes them fall more frequently...
-    fallRate--;
+    fallRate-=fallRateDelta;
   }
 
   skeles.forEach((skele) => {
@@ -247,7 +262,7 @@ class Skele {
     //colorMode(HSB);
     //let hue = 0;
     // draw connecting lines
-    strokeWeight(2);
+    strokeWeight(3);
     stroke(17, 9, 2);
     beginShape(LINES);
 
@@ -302,7 +317,7 @@ class Skele {
     // draw keypoints
     for (let i = 0; i < this.keyPoints.length; i++) {
       let p = this.keyPoints[i];
-      strokeWeight(this.size / 50);
+      strokeWeight(this.size / 40);
       //stroke(hue, 50, 100);
       if (this.keyPointsPlayed[i]) {
         stroke(255, 50, 50);
@@ -310,7 +325,6 @@ class Skele {
         stroke(17, 9, 2);
       }
       point(p.x, p.y);
-      //hue += 360 / this.keyPoints.length;
     }
   }
 
