@@ -11,22 +11,23 @@ let lon;
 let overTime;
 let skeleIndex = 0;
 let threshold;
-let fallRate = 260; // how many frames 
+let fallRate = 260; // how many frames
 let fallRateMin = 150;
 let fallRateDelta = 2;
 let pieceDuration = 0;
 let startColor;
 let endColor;
 let bgColor;
+let storedAqiData = [
+  3, 3, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 4, 5, 5, 5,
+  5, 5, 5, 5, 5, 5, 5, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 2, 1,
+  1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3,
+];
 
 function preload() {
   lat = 41.878113;
   lon = -87.629799;
-  // let url =
-  //   "http://api.openweathermap.org/data/2.5/air_pollution/forecast?lat=" + lat + "&lon=" + lon + "&appid=87fb783a54817f1793f0556477730e7c";
-  // let url = "http://api.openweathermap.org/data/2.5/air_pollution/history?lat=" + lat + "&lon=" + lon + "&start=1687791600&end=1687964400&appid=87fb783a54817f1793f0556477730e7c";
 
-  // started the date a day earlier to better build up to the climactic aqi 5.
   // 1/2 day == 43200
   // 1 day == 86400
   // NYC 6/7/23 12AM: 1686110400
@@ -39,21 +40,23 @@ function preload() {
   const END_TIME = 1686366000;
 
   const url = `https://api.openweathermap.org/data/2.5/air_pollution/history?lat=40.73&lon=-73.9&start=${START_TIME}&end=${END_TIME}&appid=87fb783a54817f1793f0556477730e7c`;
-  // example NYC 6/8/23 to 6/10/23
-  //console.log(url);
+
   weatherData = loadJSON(url);
 }
 
 function parseData() {
   overTime = weatherData.list; // data points we have for our given window of time
-  //console.log("overtime", overTime);
+
+  //let aqiPrint = "["
   for (let i = 0; i < overTime.length; i++) {
     const aqi = weatherData.list[i].main.aqi;
-    //console.log(aqi);
-    const size = min(width/1.25, height/1.25);
+    //aqiPrint+=`${aqi},`
+    const size = min(width / 1.25, height / 1.25);
     const xVariation = random(-width / 15, width / 15);
     skeles.push(new Skele(width / 2 + xVariation, -size * 1.5, size, aqi));
   }
+  // aqiPrint += "]";
+  // console.log(aqiPrint);
 
   let d = fallRate;
   // calculate duration of piece based on how many skeletons and
@@ -64,7 +67,6 @@ function parseData() {
     } else {
       pieceDuration += fallRateMin;
     }
-    
   }
 }
 
@@ -76,10 +78,8 @@ function setup() {
   startColor = color(255);
   endColor = color(217, 108, 5);
 
-  //console.log(weatherData);
   parseData();
 
-  // threshold = (3 * height) / 4;
   threshold = height - width / 80;
 
   WebMidi.enable()
@@ -95,7 +95,7 @@ function setup() {
 function draw() {
   // set the background by interpolating between a start color (white) and an end color (always-already-apocalypse orange) based on the elapsed time and total duration of the sketch
   let colorLerpAmount = map(frameCount, 0, pieceDuration, 0, 1);
-  bgColor = lerpColor(startColor, endColor, colorLerpAmount)
+  bgColor = lerpColor(startColor, endColor, colorLerpAmount);
   background(bgColor);
 
   // every X seconds, trigger the next skele to fall by increasing the skeleIndex and setting skele.isFalling to true
