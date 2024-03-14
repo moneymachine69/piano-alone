@@ -484,3 +484,25 @@ function onEnabled() {
   //assign that output as the one we will use later
   myOutput = WebMidi.outputs[0];
 }
+
+
+
+// UTILITIES
+
+// select MIDI channel from dropdown
+let midiChannel;
+
+ // Function to update the global variable when an option is selected
+ function updateMidiChannel() {
+  midiChannel = midiChannelSelect.value;
+  myOutput = WebMidi.outputs[midiChannel];
+  console.log("Selected MIDI Channel: " + midiChannel);
+}
+
+// Add event listener to the dropdown menu
+midiChannelSelect.addEventListener("change", updateMidiChannel);
+
+start.addEventListener("click", function(){
+  loop();
+  utilities.style.display = "none";
+})

@@ -18,6 +18,7 @@ let pieceDuration = 0;
 let startColor;
 let endColor;
 let bgColor;
+let stopped = true;
 let storedAqiData = [
   3, 3, 2, 2, 2, 2, 2, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 4, 4, 4, 3, 3, 4, 5, 5, 5,
   5, 5, 5, 5, 5, 5, 5, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 2, 1,
@@ -90,6 +91,8 @@ function setup() {
     let x = map(i, 0, 108, 0, width);
     zones.push(new MidiZones(x));
   }
+
+  noLoop();
 }
 
 function draw() {
@@ -484,3 +487,23 @@ function onEnabled() {
   //assign that output as the one we will use later
   myOutput = WebMidi.outputs[0];
 }
+
+// UTILITIES
+
+// select MIDI channel from dropdown
+let midiChannel;
+
+ // Function to update the global variable when an option is selected
+ function updateMidiChannel() {
+  midiChannel = midiChannelSelect.value;
+  myOutput = WebMidi.outputs[midiChannel];
+  console.log("Selected MIDI Channel: " + midiChannel);
+}
+
+// Add event listener to the dropdown menu
+midiChannelSelect.addEventListener("change", updateMidiChannel);
+
+start.addEventListener("click", function(){
+  loop();
+  utilities.style.display = "none";
+})

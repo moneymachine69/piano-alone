@@ -1,8 +1,28 @@
 body {
     margin: 0;
     overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 canvas {
     display: block;
+}
+
+#utilities {
+    position: fixed;
+    top: 0;
+    font-size: 3rem;
+    padding: 1em;
+    background: #fff;
+}
+
+select {
+    font-size: 3rem;
+    padding: 1rem;
+}
+
+#start {
+    font-size: 3rem;
+    margin-top: 1em;
+    width: 100%;
 }
