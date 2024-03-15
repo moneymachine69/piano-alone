@@ -136,7 +136,7 @@ function draw() {
         //console.log(zoneIndex)
         zones[zoneIndex].alpha = 200;
 
-        const NOTE_TO_PLAY = int(map(p.x, 0, width, 0, 108));
+        const NOTE_TO_PLAY = int(map(p.x, 0, width, 0, 108, true));
 
         //console.log(NOTE_TO_PLAY);
 
