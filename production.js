@@ -24,6 +24,8 @@ let storedAqiData = [
   5, 5, 5, 5, 5, 5, 5, 4, 3, 3, 3, 3, 3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 3, 2, 1,
   1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3,
 ];
+let noteDuration = 1000;
+let noteRawAttack = 100;
 
 function preload() {
   lat = 41.878113;
@@ -141,12 +143,17 @@ function draw() {
         const NOTE_TO_PLAY = int(map(p.x, 0, width, 0, 108, true));
 
         //console.log(NOTE_TO_PLAY);
+        noteDuration = map(skele.distortScale, 1, 5, 105, 60);
+        noteRawAttack = map(skele.distortScale, 1, 5, 50, 120);
+        console.log(noteDuration);
+        console.log(noteRawAttack);
 
         // play note if MIDI is connected
         if (myOutput) {
+
           myOutput.playNote(NOTE_TO_PLAY, 1, {
-            duration: 1000,
-            rawAttack: 100,
+            duration: noteDuration,
+            rawAttack: noteRawAttack,
           });
         }
       }
