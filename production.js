@@ -178,7 +178,7 @@ class Skele {
     this.size = size;
     this.location = createVector(x, y);
     this.vel = createVector(0, 1);
-    this.accel = createVector(0, 0.003);
+    this.accel = createVector(0, 0.005);
     this.distortScale = distortScale;
     this.isFalling = false;
 
